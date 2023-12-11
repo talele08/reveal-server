@@ -37,8 +37,6 @@
     source="reveal.logging.http-data-file-name"/>
   <springProperty scope="context" name="loggingHttpDataRollingFileName"
     source="reveal.logging.http-data-rolling-file-name"/>
-  <springProperty scope="context" name="loggingHttpDataRollingFileName"
-    source="reveal.logging.http-data-rolling-file-name"/>
   <springProperty scope="context" name="loggingNode"
     source="reveal.logging.node"/>
 

@@ -4,13 +4,11 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,9 +30,13 @@ import org.hibernate.validator.constraints.UniqueElements;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TypeDef(
+/*@TypeDef(
     name = "list-array",
     typeClass = ListArrayType.class
+)*/
+@TypeDef(
+        name = "string-array",
+        typeClass = StringArrayType.class
 )
 @SQLDelete(sql = "UPDATE location_hierarchy SET entity_status = 'DELETED' where identifier=?")
 @Where(clause = "entity_status='ACTIVE'")
@@ -49,7 +51,12 @@ public class LocationHierarchy extends AbstractAuditableEntity {
 
   @NotEmpty(message = "node order list  is required and must not be empty")
   @UniqueElements(message = "duplicate nodes in hierarchy")
-  @Type(type = "list-array")
+  //@Type(type = "list-array")
+  @Type(type = "string-array")
+  @Column(
+          name = "node-order",
+          columnDefinition = "varchar[]"
+  )
   private List<String> nodeOrder;
 
   @OneToMany(mappedBy = "locationHierarchy")

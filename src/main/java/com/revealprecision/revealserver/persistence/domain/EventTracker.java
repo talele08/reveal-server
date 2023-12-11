@@ -1,6 +1,7 @@
 package com.revealprecision.revealserver.persistence.domain;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,13 @@ import org.hibernate.annotations.TypeDef;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TypeDef(
+/*@TypeDef(
     name = "list-array",
     typeClass = ListArrayType.class
+)*/
+@TypeDef(
+        name = "uuid-array",
+        typeClass = UUIDArrayType.class
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Accessors(chain = true, fluent = true)
@@ -50,7 +55,12 @@ public class EventTracker {
   private String supervisor;
   private String deviceUser;
   private String operationDatetime;
-  @Type(type = "list-array")
+  //@Type(type = "list-array")
+  @Type(type = "uuid-array")
+  @Column(
+          name = "contributing_events",
+          columnDefinition = "uuid[]"
+  )
   private List<UUID> contributingEvents;
 
 }

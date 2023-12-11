@@ -27,6 +27,7 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -108,6 +109,7 @@ public class UserBatchConfiguration {
   }
 
   @Bean
+  @Order(1)
   public JpaItemWriter<User> userWriter() {
     JpaItemWriter<User> writer = new JpaItemWriter<>();
     writer.setEntityManagerFactory(entityManagerFactory);

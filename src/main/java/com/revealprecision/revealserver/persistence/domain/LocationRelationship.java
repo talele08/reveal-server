@@ -3,12 +3,9 @@ package com.revealprecision.revealserver.persistence.domain;
 import com.revealprecision.revealserver.persistence.projection.LocationRelationshipProjection;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+
+import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 
@@ -28,6 +26,10 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE location_relationship SET entity_status = 'DELETED' where identifier=?")
 @Where(clause = "entity_status='ACTIVE'")
+@TypeDef(
+        name = "uuid-array",
+        typeClass = UUIDArrayType.class
+)
 public class LocationRelationship extends AbstractAuditableEntity {
 
   @Id
@@ -46,7 +48,12 @@ public class LocationRelationship extends AbstractAuditableEntity {
   @JoinColumn(name = "parent_identifier")
   private Location parentLocation;
 
-  @Type(type = "list-array")
+  //@Type(type = "list-array")
+  @Type(type = "uuid-array")
+  @Column(
+          name = "ancestry",
+          columnDefinition = "uuid[]"
+  )
   private List<UUID> ancestry;
 
   public LocationRelationship(LocationRelationshipProjection projection) {
